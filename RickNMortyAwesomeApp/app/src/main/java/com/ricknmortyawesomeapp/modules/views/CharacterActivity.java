@@ -1,6 +1,7 @@
 package com.ricknmortyawesomeapp.modules.views;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import com.ricknmortyawesomeapp.R;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
 import com.ricknmortyawesomeapp.modules.viewmodels.CharacterViewModel;
-import com.squareup.picasso.Picasso;
+import com.ricknmortyawesomeapp.modules.viewmodels.EpisodeViewModel;
 
 
 public class CharacterActivity extends AppCompatActivity {
@@ -50,8 +51,13 @@ public class CharacterActivity extends AppCompatActivity {
 
     private void refreshPage(){
         setTitle(character.name);
-        Picasso.with(this).load(character.image).into((ImageView) findViewById(R.id.character_image));
 
+        characterViewModel.getImage(character.image, new EpisodeViewModel.ImageDownloadListener() {
+            @Override
+            public void onEvent(Bitmap bitmap, Exception error) {
+                ((ImageView) findViewById(R.id.character_image)).setImageBitmap(bitmap);
+            }
+        });
         ((TextView)findViewById(R.id.character_status)).setText(character.status);
         ((TextView)findViewById(R.id.character_gender)).setText(character.gender);
         ((TextView)findViewById(R.id.character_location)).setText(character.location.name);

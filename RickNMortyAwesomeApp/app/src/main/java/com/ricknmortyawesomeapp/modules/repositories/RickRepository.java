@@ -1,13 +1,14 @@
 package com.ricknmortyawesomeapp.modules.repositories;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.graphics.Bitmap;
 
-import com.ricknmortyawesomeapp.modules.models.CharModel;
-import com.ricknmortyawesomeapp.modules.models.DataModel;
 import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.services.APIServices;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class RickRepository {
     private List<ResultCharacters> alive = new ArrayList<>();
     private int selectedEpisode;
     private int selectedCharacter;
+    private HashMap<String, Bitmap> photoThumbnails = new HashMap<>();
 
     public static RickRepository getInstance(){
         if(instance == null){
@@ -68,6 +70,14 @@ public class RickRepository {
         } else {
             this.characters.addAll(dataModel);
         }
+    }
+
+    public void setPhotoThumbnails(String id, Bitmap image) {
+        this.photoThumbnails.put(id, image);
+    }
+
+    public HashMap<String, Bitmap> getPhotoThumbnails() {
+        return photoThumbnails;
     }
 
     public MutableLiveData<List<Result>> getEpisodesNames(){
@@ -139,6 +149,10 @@ public class RickRepository {
 
     public String getSelectedEpisodeTitle(){
         return episodes.get(selectedEpisode).name;
+    }
+
+    public Bitmap getImage(final String url){
+        return photoThumbnails.get(url);
     }
 }
 

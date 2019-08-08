@@ -2,6 +2,7 @@ package com.ricknmortyawesomeapp.modules.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,9 +13,9 @@ import android.widget.Toast;
 
 import com.ricknmortyawesomeapp.R;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.viewmodels.EpisodeViewModel;
 import com.ricknmortyawesomeapp.modules.views.CharacterActivity;
 import com.ricknmortyawesomeapp.modules.views.EpisodeActivity;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,19 +43,40 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
+        final EpisodeActivity episodeActivity = (EpisodeActivity)mContext;
 
         if (position<alive.size()) {
-            Picasso.with(mContext).load(alive.get(position).image).into(holder.alive);
+            episodeActivity.episodeViewModel.getImage(alive.get(position).image, new EpisodeViewModel.ImageDownloadListener() {
+                @Override
+                public void onEvent(Bitmap bitmap, Exception error) {
+                    if (error == null && bitmap != null) {
+                        holder.alive.setImageBitmap(bitmap);
+                    } else {
+                        holder.alive.setImageResource(0);
+                    }
+                }
+            });
         } else {
             holder.alive.setImageResource(0);
         }
+
         if (position<dead.size()) {
-            Picasso.with(mContext).load(dead.get(position).image).into(holder.dead);
-        } else {
+            episodeActivity.episodeViewModel.getImage(dead.get(position).image, new EpisodeViewModel.ImageDownloadListener() {
+                @Override
+                public void onEvent(Bitmap bitmap, Exception error) {
+                    if (error == null && bitmap != null) {
+                        holder.dead.setImageBitmap(bitmap);
+                    } else {
+                        holder.dead.setImageResource(0);
+                    }
+                }
+            });
+        } else  {
             holder.dead.setImageResource(0);
         }
+
 
         holder.alive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +86,7 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                 Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
 
                 Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
-                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                episodeActivity.episodeViewModel.setSelectedCharacter(resultCharacters.id);
                 Intent intent = new Intent(mContext, CharacterActivity.class);
                 mContext.startActivity(intent);
             }

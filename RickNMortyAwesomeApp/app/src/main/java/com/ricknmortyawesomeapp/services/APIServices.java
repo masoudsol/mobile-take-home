@@ -3,6 +3,7 @@ package com.ricknmortyawesomeapp.services;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -42,6 +43,24 @@ public class APIServices {
         dataProvider = RickRepository.getInstance();
     }
 
+    public void fetchPhoto(final String url, final CompletionListener completionListener){
+
+        // Image was not found in cache; load it from the server
+        downloadImage(url, new NetworkListener() {
+            @Override
+            public void onEvent(Object response, Exception error) {
+                if (error == null) {
+                    Bitmap bitmap = (Bitmap) response;
+                    dataProvider.setPhotoThumbnails(url, bitmap);
+                    completionListener.onCompletion(true, null);
+                } else {
+                    completionListener.onCompletion(false,error);
+                }
+            }
+        });
+
+    }
+
     public void fetchAllEpisodes(final String url, final CompletionListener completionListener) {
         NetworkListener networkListener = new NetworkListener() {
             @Override
@@ -57,6 +76,8 @@ public class APIServices {
                         completionListener.onCompletion(true, error);
                     }
 
+                }else {
+                    completionListener.onCompletion( false, error);
                 }
 
             }
@@ -79,6 +100,8 @@ public class APIServices {
                     } else {
                         completionListener.onCompletion(true, error);
                     }
+                }else {
+                    completionListener.onCompletion( false, error);
                 }
             }
         };
@@ -111,64 +134,52 @@ public class APIServices {
         Volley.newRequestQueue(context).add(stringRequest);
     }
 
-//    /* Start a thread to send http request to web server use HttpURLConnection object. */
-//    private void startSendHttpRequestThread(final String reqUrl, final NetworkListener networkListener)
-//    {
-//        Thread sendHttpRequestThread = new Thread()
-//        {
-//            @Override
-//            public void run() {
-//                // Maintain http url connection.
-//                HttpURLConnection httpConn = null;
-//
-//                // Read text input stream.
-//                InputStreamReader isReader = null;
-//
-//                // Read text into buffer.
-//                BufferedReader bufReader = null;
-//
-//                // Save server response text.
-//                StringBuffer readTextBuf = new StringBuffer();
-//
-//                try {
-//                    // Create a URL object use page url.
-//                    URL url = new URL(reqUrl);
-//
-//                    // Open http connection to web server.
-//                    httpConn = (HttpURLConnection)url.openConnection();
-//
-//                    // Set connection timeout and read timeout value.
-//                    httpConn.setConnectTimeout(10000);
-//                    httpConn.setReadTimeout(10000);
-//
-//                    httpConn.setDoInput(true);
-//                    httpConn.connect();
-//                    InputStream input = httpConn.getInputStream();
-//                    Bitmap myBitmap = BitmapFactory.decodeStream(input);
-//
-//                    networkListener.onEvent(myBitmap,null);
-//
-//                }catch(IOException ex)
-//                {
-//                    Log.e(TAG, ex.getMessage(), ex);
-//                }finally {
-//                    httpConn.disconnect();
-//                }
-//            }
-//        };
-//        // Start the child thread to request web page.
-//        sendHttpRequestThread.start();
-//    }
+    /* Start a thread to send http request to web server use HttpURLConnection object. */
+    private void downloadImage(final String reqUrl, final NetworkListener networkListener)
+    {
+        Thread sendHttpRequestThread = new Thread()
+        {
+            @Override
+            public void run() {
+                // Maintain http url connection.
+                HttpURLConnection httpConn = null;
 
-//    public void getPhoto(String url, final NetworkListener networkListener){
-//
-//        // Image was not found in cache; load it from the server
-//        URL serverURL;
-//        try {
-//            serverURL = new URL(url);
-//        } catch (MalformedURLException exception) {
-//            throw new RuntimeException(exception);
-//        }
-//
-//    }
+                try {
+                    // Create a URL object use page url.
+                    URL url = new URL(reqUrl);
+
+                    // Open http connection to web server.
+                    httpConn = (HttpURLConnection)url.openConnection();
+
+                    // Set connection timeout and read timeout value.
+                    httpConn.setConnectTimeout(10000);
+                    httpConn.setReadTimeout(10000);
+
+                    httpConn.setDoInput(true);
+                    httpConn.connect();
+                    InputStream input = httpConn.getInputStream();
+                    final Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                    Handler mainHandler = new Handler(context.getMainLooper());
+                    mainHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            networkListener.onEvent(myBitmap,null);
+                        }
+                    });
+
+
+                }catch(IOException ex)
+                {
+                    Log.e(TAG, ex.getMessage(), ex);
+                }finally {
+                    httpConn.disconnect();
+                }
+            }
+        };
+        // Start the child thread to request web page.
+        sendHttpRequestThread.start();
+    }
+
+
 }

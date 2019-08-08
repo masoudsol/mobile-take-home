@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
 import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 
-public class CharacterViewModel extends AndroidViewModel {
+public class CharacterViewModel extends SuperViewModel {
 
     private RickRepository dataProvider = RickRepository.getInstance();
 

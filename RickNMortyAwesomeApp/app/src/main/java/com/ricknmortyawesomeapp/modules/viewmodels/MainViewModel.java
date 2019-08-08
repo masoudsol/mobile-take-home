@@ -12,10 +12,9 @@ import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 
 import java.util.List;
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends SuperViewModel {
 
     private MutableLiveData<List<Result>> episodesNamesMutableLiveData;
-    private RickRepository dataProvider = RickRepository.getInstance();
 
     public MainViewModel(@NonNull Application application) {
         super(application);

@@ -114,6 +114,9 @@ public class APIServices {
                     URL connectionURL = new URL(url);
 
                     urlConnection = (HttpURLConnection) connectionURL.openConnection();
+                    // Set connection timeout and read timeout value.
+                    urlConnection.setConnectTimeout(10000);
+                    urlConnection.setReadTimeout(10000);
 
                     int responseCode = urlConnection.getResponseCode();
 
@@ -182,10 +185,8 @@ public class APIServices {
                 HttpURLConnection httpConn = null;
 
                 try {
-                    // Create a URL object use page url.
                     URL url = new URL(reqUrl);
 
-                    // Open http connection to web server.
                     httpConn = (HttpURLConnection)url.openConnection();
 
                     // Set connection timeout and read timeout value.
@@ -214,9 +215,6 @@ public class APIServices {
                 }
             }
         };
-        // Start the child thread to request web page.
         sendHttpRequestThread.start();
     }
-
-
 }

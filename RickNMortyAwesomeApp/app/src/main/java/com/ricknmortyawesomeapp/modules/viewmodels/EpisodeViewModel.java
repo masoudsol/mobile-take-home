@@ -1,7 +1,6 @@
 package com.ricknmortyawesomeapp.modules.viewmodels;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;

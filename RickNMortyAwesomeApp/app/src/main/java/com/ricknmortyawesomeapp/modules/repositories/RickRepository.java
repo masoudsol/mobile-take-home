@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 
 import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
-import com.ricknmortyawesomeapp.services.APIServices;
 
 import java.util.ArrayList;
 import java.util.HashMap;

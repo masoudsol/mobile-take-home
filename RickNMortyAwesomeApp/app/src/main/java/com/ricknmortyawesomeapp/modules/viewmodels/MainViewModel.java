@@ -1,14 +1,12 @@
 package com.ricknmortyawesomeapp.modules.viewmodels;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.services.APIServices;
-import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 
 import java.util.List;
 

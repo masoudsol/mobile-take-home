@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MainListStyle">
+        <item name="android:textColor">#000
+        </item>
+    </style>
+
 </resources>

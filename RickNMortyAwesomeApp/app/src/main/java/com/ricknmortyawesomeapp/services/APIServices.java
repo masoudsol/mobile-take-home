@@ -6,11 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.ricknmortyawesomeapp.modules.models.CharModel;
 import com.ricknmortyawesomeapp.modules.models.DataModel;
@@ -21,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class APIServices {
@@ -84,6 +78,7 @@ public class APIServices {
         };
 
         requestAPI(url, networkListener);
+
     }
 
     public void fetchAllCharacters(final String url, final CompletionListener completionListener) {
@@ -109,29 +104,71 @@ public class APIServices {
         requestAPI(url, networkListener);
     }
 
-    private void requestAPI(String url, final NetworkListener networkListener) {
-        // Request a string response\
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response != null) {
-                            networkListener.onEvent(response, null);
-                        }
-                    }
-                }, new Response.ErrorListener() {
+    private void requestAPI(final String url, final NetworkListener networkListener) {
+        Thread sendHttpRequestThread = new Thread()
+        {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void run() {
+                HttpURLConnection urlConnection = null;
+                try {
+                    URL connectionURL = new URL(url);
 
-                // Error handling
-                error.printStackTrace();
-                networkListener.onEvent(null, error);
+                    urlConnection = (HttpURLConnection) connectionURL.openConnection();
 
+                    int responseCode = urlConnection.getResponseCode();
+
+                    if(responseCode == HttpURLConnection.HTTP_OK){
+                        final String result = readStream(urlConnection.getInputStream());
+                        Log.v("response json", result);
+                        Handler mainHandler = new Handler(context.getMainLooper());
+                        mainHandler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                networkListener.onEvent(result,null);
+                            }
+                        });
+                    } else {
+                        networkListener.onEvent(null,null);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    networkListener.onEvent(null,e);
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
             }
-        });
+        };
 
-        // Add the request to the queue
-        Volley.newRequestQueue(context).add(stringRequest);
+        sendHttpRequestThread.start();
+
+    }
+
+    private String readStream(InputStream in) {
+        BufferedReader reader = null;
+        StringBuffer response = new StringBuffer();
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return response.toString();
     }
 
     /* Start a thread to send http request to web server use HttpURLConnection object. */

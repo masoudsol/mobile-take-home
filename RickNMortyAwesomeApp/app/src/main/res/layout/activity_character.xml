@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/character_image"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="press me"
+        android:textColor="@color/white"
+        android:id="@+id/character_button"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingLeft="20dp">
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            style="@style/CharacterFirstRowStyle"
+            android:text="Status:"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CharacterSecondRowStyle"
+            android:text="Status:"
+            android:id="@+id/character_status"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingLeft="20dp">
+        <TextView
+            style="@style/CharacterFirstRowStyle"
+            android:text="Species:"/>
+
+        <TextView
+            style="@style/CharacterSecondRowStyle"
+            android:text="Species:"
+            android:id="@+id/character_species"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingLeft="20dp">
+        <TextView
+            style="@style/CharacterFirstRowStyle"
+            android:text="Gender:"/>
+
+        <TextView
+            style="@style/CharacterSecondRowStyle"
+            android:text="Gender:"
+            android:id="@+id/character_gender"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingLeft="20dp">
+        <TextView
+            style="@style/CharacterFirstRowStyle"
+            android:text="Origin:"/>
+
+        <TextView
+            style="@style/CharacterSecondRowStyle"
+            android:text="Origin:"
+            android:id="@+id/character_origin"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingLeft="20dp">
+        <TextView
+            style="@style/CharacterFirstRowStyle"
+            android:text="Location:"/>
+        <TextView
+            style="@style/CharacterSecondRowStyle"
+            android:text="Location:"
+            android:id="@+id/character_location"/>
+
+    </LinearLayout>
+</LinearLayout>

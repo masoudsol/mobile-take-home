@@ -1,24 +1,21 @@
 package com.ricknmortyawesomeapp.modules.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ricknmortyawesomeapp.R;
-import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.views.CharacterActivity;
+import com.ricknmortyawesomeapp.modules.views.EpisodeActivity;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,22 +24,14 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<Result> episodes;
-    private List<ResultCharacters> characters;
     private List<ResultCharacters> dead;
     private List<ResultCharacters> alive;
     private Context mContext;
-    private int selectedIndex;
 
-    public EpisodeRecycleViewAdapter(List<Result> episodes, List<ResultCharacters> characters, int selected, Context mContext) {
-        this.episodes = episodes;
-        this.characters = characters;
+    public EpisodeRecycleViewAdapter(List<ResultCharacters> alive, List<ResultCharacters> dead, Context mContext) {
         this.mContext = mContext;
-        selectedIndex = selected;
-        dead = new ArrayList<>();
-        alive = new ArrayList<>();
-
-        setupData();
+        this.dead = dead;
+        this.alive = alive;
     }
 
     @Override
@@ -58,24 +47,47 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
 
         if (position<alive.size()) {
             Picasso.with(mContext).load(alive.get(position).image).into(holder.alive);
+        } else {
+            holder.alive.setImageResource(0);
         }
         if (position<dead.size()) {
             Picasso.with(mContext).load(dead.get(position).image).into(holder.dead);
+        } else {
+            holder.dead.setImageResource(0);
         }
 
-
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.alive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Log.d(TAG, "onClick: clicked on: " + titles.get(position));
 
+                ResultCharacters resultCharacters = alive.get(position);
+                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+
+                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
+                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                Intent intent = new Intent(mContext, CharacterActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.dead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ResultCharacters resultCharacters = dead.get(position);
+                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+
+                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
+                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                Intent intent = new Intent(mContext, CharacterActivity.class);
+                mContext.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return characters.size()>0? dead.size()>alive.size()? dead.size():alive.size():0;
+        return dead.size()>alive.size()? dead.size():alive.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -88,25 +100,6 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
             dead = itemView.findViewById(R.id.dead);
 
             parentLayout = itemView.findViewById(R.id.parent_layout);
-        }
-    }
-
-    public void setupData() {
-        if (alive.size() == 0 && dead.size()==0) {
-            List<Integer> charIDs = new ArrayList<>();
-            for (String result : episodes.get(selectedIndex).characters) {
-                charIDs.add(Integer.valueOf(result.replace("https://rickandmortyapi.com/api/character/", "")));
-            }
-            if (characters.size() > charIDs.get(charIDs.size() - 1)) {
-                for (int index : charIDs) {
-                    ResultCharacters character = characters.get(index - 1);
-                    if (character.status.equals("Alive")) {
-                        alive.add(character);
-                    } else {
-                        dead.add(character);
-                    }
-                }
-            }
         }
     }
 }

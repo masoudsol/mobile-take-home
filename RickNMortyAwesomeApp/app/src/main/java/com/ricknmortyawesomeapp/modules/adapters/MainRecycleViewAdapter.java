@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ricknmortyawesomeapp.R;
-import com.ricknmortyawesomeapp.modules.models.DataModel;
 import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.views.EpisodeActivity;
 import com.ricknmortyawesomeapp.modules.views.MainActivity;
@@ -29,16 +27,11 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
     private static final String TAG = "RecyclerViewAdapter";
 
     private List<Result> titles;
-//    private List<String> espisodes;
-//    private List<String> airdates;
     private Context mContext;
 
     public MainRecycleViewAdapter(Context context, List<Result> titles) {
         this.titles = titles;
-//        mImages = images;
         mContext = context;
-//        this.espisodes = episodes;
-//        this.airdates = airdates;
     }
 
     @Override
@@ -51,11 +44,6 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
-
-//        Glide.with(mContext)
-//                .asBitmap()
-//                .load(mImages.get(position))
-//                .into(holder.title);
 
         final Result result = titles.get(position);
         holder.episode.setText(result.episode);
@@ -78,7 +66,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
                 Toast.makeText(mContext, result.name, Toast.LENGTH_SHORT).show();
                 ((MainActivity)mContext).mainViewModel.setEpisodeSelected(position);
-
+                ((MainActivity)mContext).mainViewModel.updateDeadAliveCharacters();
                 Intent intent = new Intent(mContext, EpisodeActivity.class);
                 mContext.startActivity(intent);
             }

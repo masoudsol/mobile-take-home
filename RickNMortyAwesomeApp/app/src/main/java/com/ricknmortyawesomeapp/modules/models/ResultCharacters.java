@@ -11,7 +11,6 @@ public class ResultCharacters implements Serializable {
     public String name;
     public String air_date;
     public List<String> episode;
-    public List<String> characters;
     public String url;
     public String created;
     public String status;

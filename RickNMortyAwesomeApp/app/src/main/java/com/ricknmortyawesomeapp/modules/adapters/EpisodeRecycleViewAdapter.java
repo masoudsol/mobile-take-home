@@ -36,19 +36,27 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_episodeitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+        holder.position = viewType;
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called.");
         final EpisodeActivity episodeActivity = (EpisodeActivity)mContext;
 
-        if (position<alive.size()) {
-            episodeActivity.episodeViewModel.getImage(alive.get(position).image, new EpisodeViewModel.ImageDownloadListener() {
+        final int holderPosition = holder.position;
+
+        if (holderPosition<alive.size()) {
+            episodeActivity.episodeViewModel.getImage(alive.get(holderPosition).image, new EpisodeViewModel.ImageDownloadListener() {
                 @Override
                 public void onEvent(Bitmap bitmap, Exception error) {
                     if (error == null && bitmap != null) {
@@ -57,7 +65,7 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                             @Override
                             public void onClick(View view) {
 
-                                ResultCharacters resultCharacters = alive.get(position);
+                                ResultCharacters resultCharacters = alive.get(holderPosition);
                                 Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
 
                                 Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
@@ -77,17 +85,18 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
             holder.alive.setOnClickListener(null);
         }
 
-        if (position<dead.size()) {
-            episodeActivity.episodeViewModel.getImage(dead.get(position).image, new EpisodeViewModel.ImageDownloadListener() {
+        if (holderPosition<dead.size()) {
+            episodeActivity.episodeViewModel.getImage(dead.get(holderPosition).image, new EpisodeViewModel.ImageDownloadListener() {
                 @Override
                 public void onEvent(Bitmap bitmap, Exception error) {
                     if (error == null && bitmap != null) {
+                        Log.d(TAG, "onBindViewHolder: "+dead.get(holderPosition).name+ " Added "+holderPosition);
                         holder.dead.setImageBitmap(bitmap);
                         holder.dead.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
-                                ResultCharacters resultCharacters = dead.get(position);
+                                ResultCharacters resultCharacters = dead.get(holderPosition);
                                 Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
 
                                 Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
@@ -97,15 +106,18 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                             }
                         });
                     } else {
+                        Log.d(TAG, "onBindViewHolder: "+dead.get(holderPosition).name+ "removed "+holderPosition);
                         holder.dead.setImageResource(0);
                         holder.dead.setOnClickListener(null);
                     }
                 }
             });
         } else  {
+            Log.d(TAG, "onBindViewHolder: removed "+holderPosition);
             holder.dead.setImageResource(0);
             holder.dead.setOnClickListener(null);
         }
+
     }
 
     @Override
@@ -117,6 +129,8 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
 
         CircleImageView alive, dead;
         LinearLayout parentLayout;
+        int position;
+
         public ViewHolder(View itemView) {
             super(itemView);
             alive = itemView.findViewById(R.id.alive);

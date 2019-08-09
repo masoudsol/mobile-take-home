@@ -53,13 +53,28 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                 public void onEvent(Bitmap bitmap, Exception error) {
                     if (error == null && bitmap != null) {
                         holder.alive.setImageBitmap(bitmap);
+                        holder.alive.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                ResultCharacters resultCharacters = alive.get(position);
+                                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+
+                                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
+                                episodeActivity.episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                                Intent intent = new Intent(mContext, CharacterActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        });
                     } else {
                         holder.alive.setImageResource(0);
+                        holder.alive.setOnClickListener(null);
                     }
                 }
             });
         } else {
             holder.alive.setImageResource(0);
+            holder.alive.setOnClickListener(null);
         }
 
         if (position<dead.size()) {
@@ -68,43 +83,29 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                 public void onEvent(Bitmap bitmap, Exception error) {
                     if (error == null && bitmap != null) {
                         holder.dead.setImageBitmap(bitmap);
+                        holder.dead.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                ResultCharacters resultCharacters = dead.get(position);
+                                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+
+                                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
+                                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                                Intent intent = new Intent(mContext, CharacterActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        });
                     } else {
                         holder.dead.setImageResource(0);
+                        holder.dead.setOnClickListener(null);
                     }
                 }
             });
         } else  {
             holder.dead.setImageResource(0);
+            holder.dead.setOnClickListener(null);
         }
-
-
-        holder.alive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                ResultCharacters resultCharacters = alive.get(position);
-                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
-
-                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
-                episodeActivity.episodeViewModel.setSelectedCharacter(resultCharacters.id);
-                Intent intent = new Intent(mContext, CharacterActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
-
-        holder.dead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                ResultCharacters resultCharacters = dead.get(position);
-                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
-
-                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
-                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
-                Intent intent = new Intent(mContext, CharacterActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override

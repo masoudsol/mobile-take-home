@@ -26,11 +26,11 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<Result> titles;
+    private List<Result> results;
     private Context mContext;
 
     public MainRecycleViewAdapter(Context context, List<Result> titles) {
-        this.titles = titles;
+        this.results = titles;
         mContext = context;
     }
 
@@ -45,7 +45,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        final Result result = titles.get(position);
+        final Result result = results.get(position);
         holder.episode.setText(result.episode);
         holder.title.setText(result.name);
         SimpleDateFormat fmt;
@@ -75,8 +75,8 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     @Override
     public int getItemCount() {
-        if (titles != null){
-            return titles.size();
+        if (results != null){
+            return results.size();
         }
         return 0;
     }

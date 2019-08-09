@@ -44,4 +44,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mainRecycleViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mainViewModel.getEpisodesNamesMutableLiveData().removeObservers(this);
+    }
 }

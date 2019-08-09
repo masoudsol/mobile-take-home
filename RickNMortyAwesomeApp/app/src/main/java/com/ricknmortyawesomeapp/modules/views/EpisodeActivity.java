@@ -61,4 +61,11 @@ public class EpisodeActivity extends AppCompatActivity {
         episodeRecycleViewAdapter.notifyDataSetChanged();
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        episodeViewModel.getLiveCharactersMutableLiveData().removeObservers(this);
+    }
 }

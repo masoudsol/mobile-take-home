@@ -55,69 +55,40 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
 
         final int holderPosition = holder.position;
 
-        if (holderPosition<alive.size()) {
-            episodeActivity.episodeViewModel.getImage(alive.get(holderPosition).image, new EpisodeViewModel.ImageDownloadListener() {
-                @Override
-                public void onEvent(Bitmap bitmap, Exception error) {
-                    if (error == null && bitmap != null) {
-                        holder.alive.setImageBitmap(bitmap);
-                        holder.alive.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+        for (int i = 0; i < 2; i++) {
+            final List<ResultCharacters> characters = (i==0?alive:dead);
+            final CircleImageView imageView = (i==0?holder.alive:holder.dead);
 
-                                ResultCharacters resultCharacters = alive.get(holderPosition);
-                                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+            if (holderPosition<characters.size()) {
+                episodeActivity.episodeViewModel.getImage(characters.get(holderPosition).image, new EpisodeViewModel.ImageDownloadListener() {
+                    @Override
+                    public void onEvent(Bitmap bitmap, Exception error) {
+                        if (error == null && bitmap != null) {
+                            imageView.setImageBitmap(bitmap);
+                            imageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
-                                episodeActivity.episodeViewModel.setSelectedCharacter(resultCharacters.id);
-                                Intent intent = new Intent(mContext, CharacterActivity.class);
-                                mContext.startActivity(intent);
-                            }
-                        });
-                    } else {
-                        holder.alive.setImageResource(0);
-                        holder.alive.setOnClickListener(null);
+                                    ResultCharacters resultCharacters = characters.get(holderPosition);
+                                    Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
+
+                                    Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
+                                    episodeActivity.episodeViewModel.setSelectedCharacter(resultCharacters.id);
+                                    Intent intent = new Intent(mContext, CharacterActivity.class);
+                                    mContext.startActivity(intent);
+                                }
+                            });
+                        } else {
+                            imageView.setImageResource(0);
+                            imageView.setOnClickListener(null);
+                        }
                     }
-                }
-            });
-        } else {
-            holder.alive.setImageResource(0);
-            holder.alive.setOnClickListener(null);
+                });
+            } else {
+                imageView.setImageResource(0);
+                imageView.setOnClickListener(null);
+            }
         }
-
-        if (holderPosition<dead.size()) {
-            episodeActivity.episodeViewModel.getImage(dead.get(holderPosition).image, new EpisodeViewModel.ImageDownloadListener() {
-                @Override
-                public void onEvent(Bitmap bitmap, Exception error) {
-                    if (error == null && bitmap != null) {
-                        Log.d(TAG, "onBindViewHolder: "+dead.get(holderPosition).name+ " Added "+holderPosition);
-                        holder.dead.setImageBitmap(bitmap);
-                        holder.dead.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                ResultCharacters resultCharacters = dead.get(holderPosition);
-                                Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
-
-                                Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();
-                                ((EpisodeActivity)mContext).episodeViewModel.setSelectedCharacter(resultCharacters.id);
-                                Intent intent = new Intent(mContext, CharacterActivity.class);
-                                mContext.startActivity(intent);
-                            }
-                        });
-                    } else {
-                        Log.d(TAG, "onBindViewHolder: "+dead.get(holderPosition).name+ "removed "+holderPosition);
-                        holder.dead.setImageResource(0);
-                        holder.dead.setOnClickListener(null);
-                    }
-                }
-            });
-        } else  {
-            Log.d(TAG, "onBindViewHolder: removed "+holderPosition);
-            holder.dead.setImageResource(0);
-            holder.dead.setOnClickListener(null);
-        }
-
     }
 
     @Override

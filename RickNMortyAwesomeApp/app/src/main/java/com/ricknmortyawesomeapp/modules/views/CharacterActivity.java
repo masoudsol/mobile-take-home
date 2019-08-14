@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ricknmortyawesomeapp.R;
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.viewmodels.CharacterViewModel;
 import com.ricknmortyawesomeapp.modules.viewmodels.EpisodeViewModel;
 
@@ -22,7 +22,7 @@ public class CharacterActivity extends AppCompatActivity {
     private static final String TAG = "EpisodeActivity";
     public CharacterViewModel characterViewModel;
     private Button button;
-    private  ResultCharacters character;
+    private Result character;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

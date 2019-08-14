@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.graphics.Bitmap;
 
 import com.ricknmortyawesomeapp.modules.models.Result;
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +16,9 @@ public class RickRepository {
 
     private static RickRepository instance;
     private List<Result> episodes = new ArrayList<>();
-    private List<ResultCharacters> characters = new ArrayList<>();
-    private List<ResultCharacters> dead = new ArrayList<>();
-    private List<ResultCharacters> alive = new ArrayList<>();
+    private List<Result> characters = new ArrayList<>();
+    private List<Result> dead = new ArrayList<>();
+    private List<Result> alive = new ArrayList<>();
     private int selectedEpisode;
     private int selectedCharacter;
     private HashMap<String, Bitmap> photoThumbnails = new HashMap<>();
@@ -35,11 +34,11 @@ public class RickRepository {
         this.selectedCharacter = selectedCharacter;
     }
 
-    public List<ResultCharacters> getDead() {
+    public List<Result> getDead() {
         return dead;
     }
 
-    public List<ResultCharacters> getAlive() {
+    public List<Result> getAlive() {
         return alive;
     }
 
@@ -51,7 +50,7 @@ public class RickRepository {
         return episodes;
     }
 
-    public List<ResultCharacters> getCharactersList() {
+    public List<Result> getCharactersList() {
         return characters;
     }
 
@@ -63,7 +62,7 @@ public class RickRepository {
         }
     }
 
-    public void setCharcters(List<ResultCharacters> dataModel) {
+    public void setCharcters(List<Result> dataModel) {
         if (this.characters == null) {
             this.characters = dataModel;
         } else {
@@ -86,22 +85,22 @@ public class RickRepository {
         return episodesNamesMutableLiveData;
     }
 
-    public MutableLiveData<List<ResultCharacters>> getCharacters(){
-        MutableLiveData<List<ResultCharacters>> episodesNamesMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<List<Result>> getCharacters(){
+        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
         episodesNamesMutableLiveData.setValue(characters);
 
         return episodesNamesMutableLiveData;
     }
 
-    public MutableLiveData<List<ResultCharacters>> getLiveCharacters(){
-        MutableLiveData<List<ResultCharacters>> episodesNamesMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<List<Result>> getLiveCharacters(){
+        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
         episodesNamesMutableLiveData.setValue(alive);
 
         return episodesNamesMutableLiveData;
     }
 
-    public MutableLiveData<List<ResultCharacters>> getDeadCharacters(){
-        MutableLiveData<List<ResultCharacters>> episodesNamesMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<List<Result>> getDeadCharacters(){
+        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
         episodesNamesMutableLiveData.setValue(dead);
 
         return episodesNamesMutableLiveData;
@@ -121,7 +120,7 @@ public class RickRepository {
             dead.clear();
 
             for (int index : charIDs) {
-                ResultCharacters character = characters.get(index - 1);
+                Result character = characters.get(index - 1);
                 if (character.status.equals("Alive")) {
                     alive.add(character);
                 } else {
@@ -131,8 +130,8 @@ public class RickRepository {
         }
     }
 
-    public ResultCharacters getSelectedCharacter(){
-        for (ResultCharacters result: characters){
+    public Result getSelectedCharacter(){
+        for (Result result: characters){
             if (result.id == selectedCharacter){
                 return result;
             }
@@ -141,7 +140,7 @@ public class RickRepository {
     }
 
     public void toggleCharacterStatus(){
-        ResultCharacters resultCharacter = characters.get(selectedCharacter-1);
+        Result resultCharacter = characters.get(selectedCharacter-1);
         resultCharacter.status = resultCharacter.status.equals("Alive")?"Dead":"Alive";
         seperateDeadAndAlive();
     }

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ricknmortyawesomeapp.R;
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.viewmodels.EpisodeViewModel;
 import com.ricknmortyawesomeapp.modules.views.CharacterActivity;
 import com.ricknmortyawesomeapp.modules.views.EpisodeActivity;
@@ -25,11 +25,11 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<ResultCharacters> dead;
-    private List<ResultCharacters> alive;
+    private List<Result> dead;
+    private List<Result> alive;
     private Context mContext;
 
-    public EpisodeRecycleViewAdapter(List<ResultCharacters> alive, List<ResultCharacters> dead, Context mContext) {
+    public EpisodeRecycleViewAdapter(List<Result> alive, List<Result> dead, Context mContext) {
         this.mContext = mContext;
         this.dead = dead;
         this.alive = alive;
@@ -56,7 +56,7 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
         final int holderPosition = holder.position;
 
         for (int i = 0; i < 2; i++) {
-            final List<ResultCharacters> characters = (i==0?alive:dead);
+            final List<Result> characters = (i==0?alive:dead);
             final CircleImageView imageView = (i==0?holder.alive:holder.dead);
 
             if (holderPosition<characters.size()) {
@@ -69,7 +69,7 @@ public class EpisodeRecycleViewAdapter extends RecyclerView.Adapter<EpisodeRecyc
                                 @Override
                                 public void onClick(View view) {
 
-                                    ResultCharacters resultCharacters = characters.get(holderPosition);
+                                    Result resultCharacters = characters.get(holderPosition);
                                     Log.d(TAG, "onClick: clicked on: " + resultCharacters.name);
 
                                     Toast.makeText(mContext, resultCharacters.name, Toast.LENGTH_SHORT).show();

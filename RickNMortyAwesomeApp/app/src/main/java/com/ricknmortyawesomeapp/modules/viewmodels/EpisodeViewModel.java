@@ -5,15 +5,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 import com.ricknmortyawesomeapp.services.APIServices;
 
 import java.util.List;
 
 public class EpisodeViewModel extends SuperViewModel {
-    private MutableLiveData<List<ResultCharacters>> liveCharactersMutableLiveData;
-    private MutableLiveData<List<ResultCharacters>> deadCharactersMutableLiveData;
+    private MutableLiveData<List<Result>> liveCharactersMutableLiveData;
+    private MutableLiveData<List<Result>> deadCharactersMutableLiveData;
     public interface ImageDownloadListener {
         void onEvent(Bitmap bitmap, Exception error);   //method, which can have parameters
     }
@@ -48,11 +48,11 @@ public class EpisodeViewModel extends SuperViewModel {
         dataProvider.setSelectedCharacter(charID);
     }
 
-    public MutableLiveData<List<ResultCharacters>> getLiveCharactersMutableLiveData() {
+    public MutableLiveData<List<Result>> getLiveCharactersMutableLiveData() {
         return liveCharactersMutableLiveData;
     }
 
-    public MutableLiveData<List<ResultCharacters>> getDeadCharactersMutableLiveData() {
+    public MutableLiveData<List<Result>> getDeadCharactersMutableLiveData() {
         return deadCharactersMutableLiveData;
     }
 }

@@ -3,7 +3,7 @@ package com.ricknmortyawesomeapp.modules.viewmodels;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 
 public class CharacterViewModel extends SuperViewModel {
@@ -14,7 +14,7 @@ public class CharacterViewModel extends SuperViewModel {
         super(application);
     }
 
-    public ResultCharacters getCharacter(){
+    public Result getCharacter(){
         return dataProvider.getSelectedCharacter();
     }
 

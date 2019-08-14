@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 
 import com.ricknmortyawesomeapp.R;
 import com.ricknmortyawesomeapp.modules.adapters.EpisodeRecycleViewAdapter;
-import com.ricknmortyawesomeapp.modules.models.ResultCharacters;
+import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.viewmodels.EpisodeViewModel;
 
 import java.util.List;
@@ -35,9 +35,9 @@ public class EpisodeActivity extends AppCompatActivity {
 
         episodeViewModel = ViewModelProviders.of(this).get(EpisodeViewModel.class);
 
-        episodeViewModel.getLiveCharactersMutableLiveData().observe(this, new Observer<List<ResultCharacters>>() {
+        episodeViewModel.getLiveCharactersMutableLiveData().observe(this, new Observer<List<Result>>() {
             @Override
-            public void onChanged(@Nullable List<ResultCharacters> dataModel) {
+            public void onChanged(@Nullable List<Result> dataModel) {
                 if (dataModel != null && dataModel.size()>0) {
                     mProgressBar.setVisibility(View.GONE);
 

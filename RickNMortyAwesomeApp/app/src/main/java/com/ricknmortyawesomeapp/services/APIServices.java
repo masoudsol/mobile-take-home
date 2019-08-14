@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
-import com.ricknmortyawesomeapp.modules.models.CharModel;
+import com.google.gson.GsonBuilder;
 import com.ricknmortyawesomeapp.modules.models.DataModel;
 import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
 
@@ -15,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -86,7 +89,24 @@ public class APIServices {
             @Override
             public void onEvent(Object response, Exception error) {
                 if (error == null) {
-                    CharModel episodeModel = new Gson().fromJson((String) response, CharModel.class);
+                    Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT)
+                            .setExclusionStrategies(new ExclusionStrategy() {
+                                @Override
+                                public boolean shouldSkipField(FieldAttributes f) {
+                                    Log.d(TAG, "shouldSkipField: "+f.getName()+" "+f.getDeclaredType()+" "+f.getAnnotations());
+                                    if (f.getName().equals("episode")){
+                                        return true;
+                                    }
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean shouldSkipClass(Class<?> clazz) {
+                                    return false;
+                                }
+                            }).create();
+
+                    DataModel episodeModel = gson.fromJson((String) response, DataModel.class);
                     dataProvider.setCharcters(episodeModel.results);
 
                     String secondUrl = episodeModel.info.next;

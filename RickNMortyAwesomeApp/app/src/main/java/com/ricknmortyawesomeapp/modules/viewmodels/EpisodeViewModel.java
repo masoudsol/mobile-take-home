@@ -29,7 +29,7 @@ public class EpisodeViewModel extends SuperViewModel {
         deadCharactersMutableLiveData = dataProvider.getDeadCharacters();
 
         apiServices = new APIServices(application);
-        if (dataProvider.getCharactersList().size() < 1) {
+        if (dataProvider.getCharactersList().isEmpty()) {
             apiServices.fetchCharacters(new APIServices.CompletionListener() {
                 @Override
                 public void onCompletion(Boolean success, Exception error) {

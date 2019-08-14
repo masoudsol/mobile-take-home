@@ -54,6 +54,19 @@ public class RickRepository {
         return characters;
     }
 
+    public void setPhotoThumbnails(String id, Bitmap image) {
+        this.photoThumbnails.put(id, image);
+    }
+
+    public HashMap<String, Bitmap> getPhotoThumbnails() {
+        return photoThumbnails;
+    }
+
+    public void setSelectedEpisode(int selectedEpisode) {
+        this.selectedEpisode = selectedEpisode;
+    }
+
+
     public void appendDataSet(List<Result> dataSet) {
         if (this.episodes == null) {
             this.episodes = dataSet;
@@ -70,44 +83,27 @@ public class RickRepository {
         }
     }
 
-    public void setPhotoThumbnails(String id, Bitmap image) {
-        this.photoThumbnails.put(id, image);
-    }
+    private MutableLiveData<List<Result>> getMutableLiveData(List<Result> list){
+        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
+        episodesNamesMutableLiveData.setValue(list);
 
-    public HashMap<String, Bitmap> getPhotoThumbnails() {
-        return photoThumbnails;
+        return episodesNamesMutableLiveData;
     }
 
     public MutableLiveData<List<Result>> getEpisodesNames(){
-        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
-        episodesNamesMutableLiveData.setValue(episodes);
-
-        return episodesNamesMutableLiveData;
+        return getMutableLiveData(episodes);
     }
 
     public MutableLiveData<List<Result>> getCharacters(){
-        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
-        episodesNamesMutableLiveData.setValue(characters);
-
-        return episodesNamesMutableLiveData;
+        return getMutableLiveData(characters);
     }
 
     public MutableLiveData<List<Result>> getLiveCharacters(){
-        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
-        episodesNamesMutableLiveData.setValue(alive);
-
-        return episodesNamesMutableLiveData;
+        return getMutableLiveData(alive);
     }
 
     public MutableLiveData<List<Result>> getDeadCharacters(){
-        MutableLiveData<List<Result>> episodesNamesMutableLiveData = new MutableLiveData<>();
-        episodesNamesMutableLiveData.setValue(dead);
-
-        return episodesNamesMutableLiveData;
-    }
-
-    public void setSelectedEpisode(int selectedEpisode) {
-        this.selectedEpisode = selectedEpisode;
+        return getMutableLiveData(dead);
     }
 
     public void seperateDeadAndAlive(){

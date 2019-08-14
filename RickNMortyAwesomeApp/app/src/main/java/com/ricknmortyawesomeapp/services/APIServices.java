@@ -93,7 +93,6 @@ public class APIServices {
                             .setExclusionStrategies(new ExclusionStrategy() {
                                 @Override
                                 public boolean shouldSkipField(FieldAttributes f) {
-                                    Log.d(TAG, "shouldSkipField: "+f.getName()+" "+f.getDeclaredType()+" "+f.getAnnotations());
                                     if (f.getName().equals("episode")){
                                         return true;
                                     }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ricknmortyawesomeapp.modules.models.Result;
 import com.ricknmortyawesomeapp.modules.repositories.RickRepository;
@@ -12,6 +13,8 @@ import com.ricknmortyawesomeapp.services.APIServices;
 import java.util.List;
 
 public class EpisodeViewModel extends SuperViewModel {
+    private static final String TAG = "EpisodeViewModel";
+
     private MutableLiveData<List<Result>> liveCharactersMutableLiveData;
     private MutableLiveData<List<Result>> deadCharactersMutableLiveData;
     public interface ImageDownloadListener {
@@ -30,9 +33,14 @@ public class EpisodeViewModel extends SuperViewModel {
             apiServices.fetchAllCharacters("https://rickandmortyapi.com/api/character/", new APIServices.CompletionListener() {
                 @Override
                 public void onCompletion(Boolean success, Exception error) {
-                    dataProvider.seperateDeadAndAlive();
-                    liveCharactersMutableLiveData.postValue(dataProvider.getAlive());
-                    liveCharactersMutableLiveData.postValue(dataProvider.getDead());
+                    if (success) {
+                        dataProvider.seperateDeadAndAlive();
+                        liveCharactersMutableLiveData.postValue(dataProvider.getAlive());
+                        liveCharactersMutableLiveData.postValue(dataProvider.getDead());
+                    } else {
+                        Log.d(TAG, "onCompletion error: "+error);
+                    }
+
                 }
             });
         }

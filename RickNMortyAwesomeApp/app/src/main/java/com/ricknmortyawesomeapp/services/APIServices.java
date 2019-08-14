@@ -23,6 +23,8 @@ import java.net.URL;
 
 public class APIServices {
     private static final String TAG = "APIServices";
+    private final String episodeURL = "https://rickandmortyapi.com/api/episode/";
+    private final String characterURL = "https://rickandmortyapi.com/api/character/";
 
     public interface NetworkListener {
         void onEvent(Object response, Exception error);   //method, which can have parameters
@@ -58,7 +60,11 @@ public class APIServices {
 
     }
 
-    public void fetchAllEpisodes(final String url, final CompletionListener completionListener) {
+    public void fetchEpisodes(CompletionListener completionListener) {
+        fetchAllEpisodes(episodeURL,completionListener);
+    }
+
+    private void fetchAllEpisodes(final String url, final CompletionListener completionListener) {
         NetworkListener networkListener = new NetworkListener() {
             @Override
             public void onEvent(final Object response, final Exception error) {
@@ -84,7 +90,11 @@ public class APIServices {
 
     }
 
-    public void fetchAllCharacters(final String url, final CompletionListener completionListener) {
+    public void fetchCharacters(CompletionListener completionListener) {
+        fetchAllCharacters(characterURL,completionListener);
+    }
+
+    private void fetchAllCharacters(final String url, final CompletionListener completionListener) {
         NetworkListener networkListener = new NetworkListener() {
             @Override
             public void onEvent(Object response, Exception error) {

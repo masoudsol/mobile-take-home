@@ -30,7 +30,7 @@ public class EpisodeViewModel extends SuperViewModel {
 
         apiServices = new APIServices(application);
         if (dataProvider.getCharactersList().size() < 1) {
-            apiServices.fetchAllCharacters("https://rickandmortyapi.com/api/character/", new APIServices.CompletionListener() {
+            apiServices.fetchCharacters(new APIServices.CompletionListener() {
                 @Override
                 public void onCompletion(Boolean success, Exception error) {
                     if (success) {

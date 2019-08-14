@@ -19,7 +19,7 @@ public class MainViewModel extends SuperViewModel {
         episodesNamesMutableLiveData = dataProvider.getEpisodesNames();
 
         APIServices apiServices = new APIServices(application);
-        apiServices.fetchAllEpisodes("https://rickandmortyapi.com/api/episode/", new APIServices.CompletionListener() {
+        apiServices.fetchEpisodes( new APIServices.CompletionListener() {
 
             @Override
             public void onCompletion(Boolean success, Exception error) {
